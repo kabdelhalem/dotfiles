@@ -36,7 +36,7 @@ mainbox {
 
 borderbox {
   orientation: horizontal;
-  children: [ "imagebox", "contentbox" ];
+  children: [ "contentbox" ];
   padding: 0px;
   spacing: 0px;
   border-radius: 3px;
@@ -51,11 +51,11 @@ contentbox {
 }
 
 /* ── Imagebox ────────────────────────────── */
-imagebox {
+/* imagebox {
   background-image: url("~/.config/tronlegacy-blue.jpg");
   background-repeat: false;
   size: 300px 625px;
-}
+}  */
 
 /* ── Elements ────────────────────────────── */
 element {

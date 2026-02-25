@@ -9,14 +9,14 @@
 
 rofi_command="rofi -dmenu -p Power"
 
-options="Shutdown\nReboot\nLogout\nSuspend\nLock"
+options="Lock\nShutdown\nReboot\nLogout\nSuspend"
 
 chosen="$(echo -e "$options" | $rofi_command)"
 case $chosen in
+    Lock) hyprctl dispatch exec hyprlock ;;
     Shutdown) systemctl poweroff ;;
     Reboot) systemctl reboot ;;
     Logout) hyprctl dispatch exit ;;
     Suspend) systemctl suspend ;;
-    Lock) ~/.config/hyprlock/lock.sh ;;
 esac
 

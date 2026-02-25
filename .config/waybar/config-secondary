@@ -1,9 +1,9 @@
 // ──────────────────────────────────────────────────────────────────────────
-//  Waybar config
+//  Waybar for secondary monitor
 // ──────────────────────────────────────────────────────────────────────────
 
 {
-  "output": "eDP-1",
+  "output": "DP-1",
   "layer": "top",
   "position": "top",
   "margin-top": 12,
@@ -23,10 +23,10 @@
   "modules-center": [
     "custom/workspace-special",
     "custom/squares",
-    "custom/workspace-1",
-    "custom/workspace-2",
-    "custom/workspace-3",
-    "custom/workspace-4",
+    "custom/workspace-5",
+    "custom/workspace-6",
+    "custom/workspace-7",
+    "custom/workspace-8",
     "custom/squares",
   ],
 
@@ -133,29 +133,29 @@
   },
 
   // ── Workspaces (custom scripts) ──────────────────────────────────
-  "custom/workspace-1": {
-    "exec": "~/.config/waybar/scripts/workspaces/workspace-1.sh",
+  "custom/workspace-5": {
+    "exec": "~/.config/waybar/scripts/workspaces/workspace-5.sh",
     "interval": 1,
-    "on-click": "hyprctl dispatch workspace 1",
-    "tooltip": "Switch to workspace 1"
+    "on-click": "hyprctl dispatch workspace 5",
+    "tooltip": "Switch to workspace 5"
   },
-  "custom/workspace-2": {
-    "exec": "~/.config/waybar/scripts/workspaces/workspace-2.sh",
+  "custom/workspace-6": {
+    "exec": "~/.config/waybar/scripts/workspaces/workspace-6.sh",
     "interval": 1,
-    "on-click": "hyprctl dispatch workspace 2",
-    "tooltip": "Switch to workspace 2"
+    "on-click": "hyprctl dispatch workspace 6",
+    "tooltip": "Switch to workspace 6"
   },
-  "custom/workspace-3": {
-    "exec": "~/.config/waybar/scripts/workspaces/workspace-3.sh",
+  "custom/workspace-7": {
+    "exec": "~/.config/waybar/scripts/workspaces/workspace-7.sh",
     "interval": 1,
-    "on-click": "hyprctl dispatch workspace 3",
-    "tooltip": "Switch to workspace 3"
+    "on-click": "hyprctl dispatch workspace 7",
+    "tooltip": "Switch to workspace 7"
   },
-  "custom/workspace-4": {
-    "exec": "~/.config/waybar/scripts/workspaces/workspace-4.sh",
+  "custom/workspace-8": {
+    "exec": "~/.config/waybar/scripts/workspaces/workspace-8.sh",
     "interval": 1,
-    "on-click": "hyprctl dispatch workspace 4",
-    "tooltip": "Switch to workspace 4"
+    "on-click": "hyprctl dispatch workspace 8",
+    "tooltip": "Switch to workspace 8"
   },
   "custom/workspace-special": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-special.sh",
