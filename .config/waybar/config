@@ -16,6 +16,7 @@
     "clock",
     "custom/power",
     "network",
+    "custom/vpn",
     "bluetooth",
     "custom/microphone",
   ],
@@ -186,6 +187,17 @@
   "custom/squares": {
     "format": " ",
     "tooltip": false
+  },
+  
+  // ── VPN ──────────────────────────────────────────────────────────
+  "custom/vpn": {
+    "exec": "~/.config/waybar/scripts/vpn-status.sh",
+    "interval": 5,
+    "on-click": "~/.config/waybar/scripts/vpn-toggle.sh",
+    "format": "{}",
+    "markup": "pango",
+    "tooltip": true,
+    "tooltip-format": "VPN Status / Toggle"
   }
 }
 
