@@ -84,6 +84,7 @@ window#waybar {
 #battery,
 #pulseaudio,
 #backlight,
+#custom-notification,
 #custom-vpn,
 #clock,
 #tray {
@@ -230,6 +231,7 @@ window#waybar {
 #custom-volume:hover,
 #pulseaudio:hover,
 #network:hover,
+#custom-notification:hover,
 #custom-vpn:hover,
 #bluetooth:hover,
 #custom-bluetooth:hover,

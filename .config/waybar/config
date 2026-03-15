@@ -13,6 +13,7 @@
 
   // ── Modules Layout ───────────────────────────────────────────────
   "modules-left": [
+    "custom/notification",
     "clock",
     "custom/power",
     "network",
@@ -200,6 +201,25 @@
     "markup": "pango",
     "tooltip": true,
     "tooltip-format": "VPN Status / Toggle"
+  },
+
+  // ── Notification Center ────────────────────────────────────────
+  "custom/notification": {
+    "exec": "swaync-client -swb",
+    "exec-on-event": false,
+    "return-type": "json",
+    "format": "{icon}",
+    "format-icons": {
+      "notification": "[ 󰂚 ]",
+      "none": "[ 󰂜 ]",
+      "dnd-notification": "[ 󰂛 ]",
+      "dnd-none": "[ 󰪑 ]"
+    },
+    "on-click": "swaync-client -t -sw",
+    "on-click-right": "swaync-client -d -sw",
+    "tooltip": true,
+    "tooltip-format": "Notifications",
+    "escape": true
   }
 }
 
