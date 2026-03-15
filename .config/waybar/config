@@ -194,7 +194,7 @@
   "custom/vpn": {
     "exec": "~/.config/waybar/scripts/vpn-status.sh",
     "exec-on-event": false,
-    "interval": 5,
+    "interval": 60,
     "signal": 8,
     "on-click": "~/.config/waybar/scripts/vpn-toggle.sh",
     "format": "{}",
