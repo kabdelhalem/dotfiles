@@ -9,3 +9,4 @@ if ip a | grep -q "wg0"; then
 else
     sudo wg-quick up wg0
 fi
+pkill -SIGRTMIN+8 waybar
