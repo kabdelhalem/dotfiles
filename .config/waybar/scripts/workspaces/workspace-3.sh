@@ -1,14 +1,41 @@
 #!/bin/bash
-# workspace-3.sh — highlight workspace 3 if active (event-driven)
+# workspace-slot-3 — shows workspace 3 (eDP-1) or 7 (DP-1) based on focused monitor
 
 SOCKET="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 
-emit() {
-  active=$(hyprctl activeworkspace -j | jq '.id')
-  if [ "$active" -eq 3 ]; then
-    echo " [ <span foreground='#fab387'>٣</span> ] "
+LABELS_EDP=(١ ٢ ٣ ٤ ٥)
+LABELS_DP=(٦ ٧ ٨ ٩ ٠)
+SLOT=2
+
+get_ws() {
+  local mon
+  mon=$(hyprctl monitors -j | jq -r '.[] | select(.focused==true) | .name')
+  if [[ "$mon" == "DP-1" ]]; then
+    echo $((SLOT + 6))
   else
-    echo " [ ٣ ] "
+    echo $((SLOT + 1))
+  fi
+}
+
+get_label() {
+  local mon
+  mon=$(hyprctl monitors -j | jq -r '.[] | select(.focused==true) | .name')
+  if [[ "$mon" == "DP-1" ]]; then
+    echo "${LABELS_DP[$SLOT]}"
+  else
+    echo "${LABELS_EDP[$SLOT]}"
+  fi
+}
+
+emit() {
+  local ws label active
+  ws=$(get_ws)
+  label=$(get_label)
+  active=$(hyprctl activeworkspace -j | jq '.id')
+  if [ "$active" -eq "$ws" ]; then
+    echo " [ <span foreground='#fab387'>$label</span> ] "
+  else
+    echo " [ $label ] "
   fi
 }
 
