@@ -1,11 +1,19 @@
 #!/bin/bash
-# workspace-1.sh — highlight workspace 1 if active
+# workspace-1.sh — highlight workspace 1 if active (event-driven)
 
-active=$(hyprctl activeworkspace -j | jq '.id')
+SOCKET="$XDG_RUNTIME_DIR/hypr/$HYPRLAND_INSTANCE_SIGNATURE/.socket2.sock"
 
-if [ "$active" -eq 1 ]; then
-  echo " [ <span foreground='#fab387'>١</span> ] "
-else
-  echo " [ ١ ] "
-fi
+emit() {
+  active=$(hyprctl activeworkspace -j | jq '.id')
+  if [ "$active" -eq 1 ]; then
+    echo " [ <span foreground='#fab387'>١</span> ] "
+  else
+    echo " [ ١ ] "
+  fi
+}
 
+emit
+
+nc -U "$SOCKET" 2>/dev/null | grep --line-buffered "^workspace>>\|^focusedmon>>" | while read -r; do
+  emit
+done

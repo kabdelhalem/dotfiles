@@ -135,31 +135,26 @@
   // ── Workspaces (custom scripts) ──────────────────────────────────
   "custom/workspace-1": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-1.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch workspace 1",
     "tooltip": "Switch to workspace 1"
   },
   "custom/workspace-2": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-2.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch workspace 2",
     "tooltip": "Switch to workspace 2"
   },
   "custom/workspace-3": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-3.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch workspace 3",
     "tooltip": "Switch to workspace 3"
   },
   "custom/workspace-4": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-4.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch workspace 4",
     "tooltip": "Switch to workspace 4"
   },
   "custom/workspace-special": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-special.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch togglespecialworkspace",
     "tooltip": "Switch to special workspace"
   },
