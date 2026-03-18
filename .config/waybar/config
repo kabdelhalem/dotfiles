@@ -121,7 +121,6 @@
   "custom/brightness": {
     "exec": "~/.config/waybar/scripts/brightness.sh",
     "return-type": "json",
-    "interval": 2,
     "on-click": "~/.config/waybar/scripts/brightness-toggle.sh",
     "on-scroll-down": "brightnessctl set +5%",
     "on-scroll-up": "brightnessctl set 5%-"
