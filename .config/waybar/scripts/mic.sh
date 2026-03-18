@@ -1,16 +1,22 @@
 #!/bin/bash
 # ── mic.sh ─────────────────────────────────────────────────
 # Description: Shows microphone mute/unmute status with icon
-# Usage: Called by Waybar `custom/microphone` module every 1s
+# Usage: Waybar `custom/microphone` (event-driven, no polling)
 # Dependencies: pactl (PulseAudio / PipeWire)
 # ───────────────────────────────────────────────────────────
 
+emit() {
+  if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q 'yes'; then
+    echo "<span foreground='#fab387'>[    ]</span>"
+  else
+    echo "<span foreground='#56b6c2'>[    ]</span>"
+  fi
+}
 
-if pactl get-source-mute @DEFAULT_SOURCE@ | grep -q 'yes'; then
-  # Muted → mic-off icon
-  echo "<span foreground='#fab387'>[  ]</span>"
-else
-  # Active → mic-on icon
-  echo "<span foreground='#56b6c2'>[  ]</span>"
-fi
+# Emit once on startup
+emit
 
+# Re-emit on any source change (mute toggle, default source switch)
+pactl subscribe 2>/dev/null | grep --line-buffered -E "'change' on source|'new' on source|'remove' on source" | while read -r; do
+  emit
+done
