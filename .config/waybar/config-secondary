@@ -109,7 +109,6 @@
   // ── Microphone ───────────────────────────────────────────────────
   "custom/microphone": {
     "exec": "~/.config/waybar/scripts/mic.sh",
-    "interval": 1,
     "tooltip": true,
     "tooltip-format": "Mic Toggle",
     "on-click": "pactl set-source-mute @DEFAULT_SOURCE@ toggle"
@@ -119,7 +118,6 @@
   "custom/brightness": {
     "exec": "~/.config/waybar/scripts/brightness.sh",
     "return-type": "json",
-    "interval": 2,
     "on-click": "~/.config/waybar/scripts/brightness-toggle.sh",
     "on-scroll-down": "brightnessctl set +5%",
     "on-scroll-up": "brightnessctl set 5%-"
@@ -135,31 +133,26 @@
   // ── Workspaces (custom scripts) ──────────────────────────────────
   "custom/workspace-5": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-5.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch workspace 5",
     "tooltip": "Switch to workspace 5"
   },
   "custom/workspace-6": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-6.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch workspace 6",
     "tooltip": "Switch to workspace 6"
   },
   "custom/workspace-7": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-7.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch workspace 7",
     "tooltip": "Switch to workspace 7"
   },
   "custom/workspace-8": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-8.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch workspace 8",
     "tooltip": "Switch to workspace 8"
   },
   "custom/workspace-special": {
     "exec": "~/.config/waybar/scripts/workspaces/workspace-special.sh",
-    "interval": 1,
     "on-click": "hyprctl dispatch togglespecialworkspace",
     "tooltip": "Switch to special workspace"
   },
@@ -168,7 +161,6 @@
   "custom/volume": {
     "exec": "~/.config/waybar/scripts/volume.sh",
     "return-type": "json",
-    "interval": 1,
     "on-click": "wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle",
     "on-scroll-up": "wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+",
     "on-scroll-down": "wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-"
