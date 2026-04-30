@@ -28,11 +28,12 @@ get_label() {
 }
 
 emit() {
-  local ws label active
+  local ws label active special
   ws=$(get_ws)
   label=$(get_label)
   active=$(hyprctl activeworkspace -j | jq '.id')
-  if [ "$active" -eq "$ws" ]; then
+  special=$(hyprctl monitors -j | jq -r '.[] | select(.focused==true) | .specialWorkspace.name')
+  if [ -n "$special" ] || [ "$active" -eq "$ws" ]; then
     echo " [ <span foreground='#fab387'>$label</span> ] "
   else
     echo " [ $label ] "
@@ -41,6 +42,6 @@ emit() {
 
 emit
 
-nc -U "$SOCKET" 2>/dev/null | grep --line-buffered "^workspace>>\|^focusedmon>>" | while read -r; do
+nc -U "$SOCKET" 2>/dev/null | grep --line-buffered "^workspace>>\|^focusedmon>>\|^activespecial>>" | while read -r; do
   emit
 done
