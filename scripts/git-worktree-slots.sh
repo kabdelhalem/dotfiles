@@ -9,6 +9,11 @@
 #   Remove the current letter-slot worktree after safety checks (dirty tree,
 #   unpushed commits). --force skips the checks.
 #
+# wt-status [--no-fetch]
+#   Show every worktree with a merged / in-progress verdict so stale slots
+#   are easy to spot and release. Uses `gh` for the PR state when available
+#   (catches squash/rebase merges), git heuristics otherwise.
+#
 # wt-help
 #   Show usage and current slot status.
 #
@@ -120,6 +125,121 @@ wt-release() {
   fi
 }
 
+wt-status() {
+  local do_fetch=1
+  [[ "$1" == "--no-fetch" ]] && do_fetch=0
+
+  local main_wt
+  main_wt=$(git worktree list --porcelain 2>/dev/null | awk '/^worktree / {print $2; exit}')
+  if [[ -z "$main_wt" ]]; then
+    echo "wt-status: not inside a git repo" >&2
+    return 1
+  fi
+
+  # Fetch with --prune so deleted-on-origin branches show up as "gone".
+  # Tolerate failure (offline etc.) and fall back to cached refs.
+  if (( do_fetch )); then
+    git -C "$main_wt" fetch --quiet --prune origin 2>/dev/null ||
+      echo "wt-status: fetch failed; showing cached state" >&2
+  fi
+
+  # Default branch ref (origin/main unless origin/HEAD says otherwise).
+  local def
+  def=$(git -C "$main_wt" symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null)
+  [[ -z "$def" ]] && def="origin/main"
+  git -C "$main_wt" rev-parse --verify --quiet "$def" >/dev/null 2>&1 || def=""
+
+  local have_gh=0
+  command -v gh >/dev/null 2>&1 && have_gh=1
+
+  local repo_name
+  repo_name=$(basename "$main_wt")
+
+  local -a wts
+  wts=("${(@f)$(git worktree list --porcelain | awk '/^worktree / {print $2}')}")
+
+  local wt sha branch label slot pr_state merged verdict ahead behind
+  local upstream_info upstream track gone count=0
+  local -a notes
+  for wt in "${wts[@]}"; do
+    [[ "$wt" == "$main_wt" ]] && continue
+    (( count++ ))
+
+    sha=$(git -C "$wt" rev-parse HEAD 2>/dev/null) || continue
+    branch=$(git -C "$wt" symbolic-ref --short HEAD 2>/dev/null)
+    label="${branch:-detached@${sha[1,7]}}"
+    slot=$(basename "$wt")
+    [[ "$slot" == "$repo_name"-? ]] && slot="${slot##*-}" || slot="-"
+
+    notes=()
+    [[ -n $(git -C "$wt" status --porcelain 2>/dev/null) ]] && notes+=("dirty")
+
+    # Upstream state: ahead count, or "gone" if deleted on origin.
+    upstream="" gone=0
+    if [[ -n "$branch" ]]; then
+      upstream_info=$(git -C "$wt" for-each-ref \
+        --format='%(upstream:short)|%(upstream:track)' "refs/heads/$branch")
+      upstream="${upstream_info%%|*}"
+      track="${upstream_info#*|}"
+      [[ "$track" == *gone* ]] && gone=1
+      if [[ -n "$upstream" && $gone -eq 0 ]]; then
+        ahead=$(git -C "$wt" rev-list --count "$upstream..$sha" 2>/dev/null)
+        [[ "$ahead" -gt 0 ]] && notes+=("$ahead unpushed")
+      elif [[ -z "$upstream" ]]; then
+        notes+=("no upstream")
+      fi
+    fi
+
+    # Merge verdict. PR state via gh is authoritative (survives squash and
+    # rebase merges); fall back to ancestry / gone-upstream heuristics.
+    pr_state=""
+    if (( have_gh )) && [[ -n "$branch" ]]; then
+      pr_state=$(cd "$wt" 2>/dev/null &&
+        gh pr view "$branch" --json state --jq .state 2>/dev/null)
+    fi
+    case "$pr_state" in
+      MERGED) merged="yes" ;;
+      OPEN)   merged="no" ;;
+      CLOSED) merged="closed" ;;
+      *)
+        if [[ -n "$def" ]] && git -C "$main_wt" merge-base --is-ancestor "$sha" "$def" 2>/dev/null; then
+          merged="yes"
+        elif (( gone )); then
+          merged="maybe"
+        else
+          merged="no"
+        fi
+        ;;
+    esac
+
+    if [[ -n "$def" && "$merged" == "no" ]]; then
+      behind=$(git -C "$wt" rev-list --count "$sha..$def" 2>/dev/null)
+      [[ "$behind" -gt 0 ]] && notes+=("$behind behind $def")
+    fi
+
+    case "$merged" in
+      yes)
+        if (( ${#notes[@]} == 0 )); then
+          verdict="✓ merged — safe to wt-release"
+        else
+          verdict="✓ merged — but ${(j:, :)notes}"
+        fi
+        ;;
+      maybe)  verdict="? upstream gone (merged & deleted on origin?)"
+              (( ${#notes[@]} )) && verdict="$verdict — ${(j:, :)notes}" ;;
+      closed) verdict="✗ PR closed without merging"
+              (( ${#notes[@]} )) && verdict="$verdict — ${(j:, :)notes}" ;;
+      *)      verdict="● in progress"
+              (( ${#notes[@]} )) && verdict="$verdict (${(j:, :)notes})" ;;
+    esac
+
+    printf "  %-2s %-28s %s\n" "$slot" "$label" "$verdict"
+  done
+
+  (( count == 0 )) && echo "  (no worktrees claimed)"
+  return 0
+}
+
 wt-help() {
   cat <<'USAGE'
 git worktree slot helpers:
@@ -130,6 +250,9 @@ git worktree slot helpers:
 
   wt-release [--force]           Remove the current letter-slot worktree
                                  (blocks on dirty tree / unpushed commits).
+
+  wt-status [--no-fetch]         Show merged / in-progress verdict for every
+                                 worktree so stale slots are easy to spot.
 
   wt-help                        Show this message and current slot status.
 USAGE
