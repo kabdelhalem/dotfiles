@@ -1,0 +1,50 @@
+/* ──────────────────────────────────────────────────────────────────────────
+   SwayOSD styling — matches waybar/rofi theme
+   (JetBrainsMono, #282c34 bg, #61afef border, #56b6c2 accent, #fab387 text)
+   ────────────────────────────────────────────────────────────────────────── */
+
+/* Same recipe as a waybar module: #292d35 box, 2px #61afef border, 2px radius */
+window#osd {
+  background: rgba(41, 45, 53, 0.95); /* #292d35 */
+  border: 2px solid #61afef;
+  border-radius: 2px;
+  padding: 10px 18px;
+}
+
+#osd #container {
+  margin: 10px;
+}
+
+#osd image {
+  color: #56b6c2;
+}
+
+#osd label {
+  font-family: "JetBrainsMono Nerd Font";
+  font-size: 14px;
+  font-weight: bold;
+  color: #fab387;
+}
+
+#osd progressbar {
+  min-height: 12px;
+  border-radius: 2px;
+  background: transparent;
+  border: none;
+}
+
+/* Trough styled like a mini waybar module: dark box, blue border */
+#osd trough {
+  min-height: 12px;
+  border-radius: 2px;
+  background: #2e3440;
+  border: 1px solid #61afef;
+}
+
+#osd progress {
+  min-height: 12px;
+  border-radius: 2px;
+  border: none;
+  background: #56b6c2;
+  margin: 2px;
+}
