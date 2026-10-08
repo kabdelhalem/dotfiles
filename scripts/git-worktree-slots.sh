@@ -1,9 +1,12 @@
 # git worktree slot helpers (zsh).
 #
 # wt-claim <branch> [base-ref]
+# wt-claim -i|--issue <number> [base-ref]
 #   Grab the next free letter slot (a..z) next to the main worktree, create
 #   or check out <branch>, and cd into it. base-ref defaults to origin/main
 #   and is only used when the branch doesn't exist yet.
+#   With -i, derive the branch name from a GitHub issue ("<number>-<slug>"),
+#   like GitHub's own "create a branch" button. Needs the gh CLI.
 #
 # wt-release [--force]
 #   Remove the current letter-slot worktree after safety checks (dirty tree,
@@ -20,9 +23,31 @@
 # Source this file from ~/.zshrc.
 
 wt-claim() {
+  if [[ "$1" == "-i" || "$1" == "--issue" ]]; then
+    local issue="$2"
+    if [[ -z "$issue" ]]; then
+      echo "usage: wt-claim -i <issue-number> [base-ref]" >&2
+      return 1
+    fi
+    command -v gh >/dev/null 2>&1 || {
+      echo "wt-claim: -i needs the gh CLI" >&2; return 1
+    }
+    local title
+    title=$(gh issue view "$issue" --json title --jq .title 2>/dev/null)
+    if [[ -z "$title" ]]; then
+      echo "wt-claim: couldn't read issue #$issue (not found, or gh not authed?)" >&2
+      return 1
+    fi
+    # Lowercase, non-alnum runs to single dashes, trim — same shape as
+    # GitHub's "create a branch" button.
+    local slug
+    slug=$(echo "$title" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]\+/-/g; s/^-//; s/-$//')
+    set -- "$issue-$slug" "$3"
+  fi
+
   local branch="$1" base="${2:-origin/main}"
   if [[ -z "$branch" ]]; then
-    echo "usage: wt-claim <branch> [base-ref]" >&2
+    echo "usage: wt-claim <branch> [base-ref]  |  wt-claim -i <issue-number> [base-ref]" >&2
     return 1
   fi
 
@@ -247,6 +272,9 @@ git worktree slot helpers:
   wt-claim <branch> [base-ref]   Grab next free letter slot (a..z), create
                                  or check out <branch>, and cd in.
                                  [base-ref] defaults to origin/main.
+
+  wt-claim -i <issue> [base-ref] Same, but name the branch from a GitHub
+                                 issue ("<issue>-<slug>"). Needs gh.
 
   wt-release [--force]           Remove the current letter-slot worktree
                                  (blocks on dirty tree / unpushed commits).
