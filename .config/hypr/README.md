@@ -14,8 +14,8 @@ The rice leans on a cool **cyan / teal** accent over a dark base, thin borders, 
 
 | Element | Value |
 |---|---|
-| Active border | `#9CDEF2` — cyan glow on the focused window |
-| Inactive border | `#444444` — muted grey |
+| Active border | `#0891B2` — blue glow on the focused window |
+| Inactive border | `#055167` — muted teal |
 | Urgent border | `#E06C75` — red until you look at it |
 | Gaps | `5` inner · `10` outer |
 | Rounding | `1` px, subtle |
@@ -74,7 +74,13 @@ _Workspaces 1–5 live on the laptop panel; 6–10 are pinned to the external mo
 
 | File | Purpose |
 |---|---|
-| `hyprland.conf` | Main config — monitors, keybinds, window rules, look & feel. |
-| `hyprlock.conf` | Lock screen. |
-| `hyprpaper.conf` | Wallpaper. |
-| `local.conf` | Machine-local overrides (gitignored). |
+| `hyprland.lua` | Main config — monitors, keybinds, window rules, look & feel (Lua, 0.55+). |
+| `hyprland.conf` | Legacy hyprlang config, kept as a fallback. Loads only if `hyprland.lua` is absent. |
+| `local.lua` | Machine-local overrides (gitignored), `require`d by `hyprland.lua`. |
+| `hyprlock.conf` | Lock screen (separate binary — stays hyprlang). |
+| `hyprpaper.conf` | Wallpaper (separate binary — stays hyprlang). |
+| `local.conf` | Legacy machine-local overrides for the `.conf` fallback (gitignored). |
+
+> ℹ️ **Lua config** — Hyprland 0.55+ configures the compositor in Lua. If
+> `~/.config/hypr/hyprland.lua` exists it loads _instead of_ `hyprland.conf`.
+> Validate a config without launching it: `Hyprland --verify-config -c ~/.config/hypr/hyprland.lua`.
