@@ -26,6 +26,7 @@ stashing or clobbering each other.
 | Command | What it does |
 |---|---|
 | `wt-claim <branch> [base]` | Grabs the next free letter slot `a…z`, creates/checks out the branch (from `origin/main` by default), and `cd`s in. |
+| `wt-claim -i <issue> [base]` | Same, but names the branch `<issue>-<slug>` from a GitHub issue's title (needs `gh`). |
 | `wt-release [--force]` | Removes the current slot — but **refuses** if the tree is dirty or has unpushed commits. `--force` overrides. |
 | `wt-status [--no-fetch]` | Lists every worktree with a **merged / in-progress verdict** (uses `gh` to catch squash & rebase merges) so stale slots are obvious. |
 | `wt-help` | Usage + a live map of claimed slots and their branches. |
