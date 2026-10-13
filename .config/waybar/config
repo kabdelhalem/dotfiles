@@ -35,9 +35,9 @@
   ],
 
   "modules-right": [
-    "custom/battery",
     "custom/volume",
-    "custom/brightness"
+    "custom/brightness",
+    "custom/battery"
   ],
 
   // ── Clock ────────────────────────────────────────────────────────

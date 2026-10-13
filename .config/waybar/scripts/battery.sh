@@ -1,8 +1,8 @@
 #!/bin/bash
 # ── battery.sh ─────────────────────────────────────────────
-# Description: Shows battery % with ASCII bar + dynamic tooltip
+# Description: Shows battery icon + % with dynamic tooltip
 # Usage: Waybar `custom/battery` every 10s
-# Dependencies: upower, awk, seq, printf
+# Dependencies: upower, awk, printf
 #  ──────────────────────────────────────────────────────────
 
 capacity=$(cat /sys/class/power_supply/BAT0/capacity)
@@ -27,13 +27,6 @@ else
     icon=${default_icons[$index]}
 fi
 
-# ASCII bar
-filled=$((capacity / 10))
-empty=$((10 - filled))
-bar=$(printf '█%.0s' $(seq 1 $filled))
-pad=$(printf '░%.0s' $(seq 1 $empty))
-ascii_bar="[$bar$pad]"
-
 # Color thresholds
 if [ "$capacity" -lt 20 ]; then
     fg="#bf616a"  # red
@@ -45,5 +38,5 @@ fi
 
 
 # JSON output
-echo "{\"text\":\"<span foreground='$fg'>$icon $ascii_bar $capacity%</span>\",\"tooltip\":\"$tooltip\"}"
+echo "{\"text\":\"<span foreground='$fg'>$icon $capacity%</span>\",\"tooltip\":\"$tooltip\"}"
 
