@@ -37,6 +37,7 @@
   "modules-right": [
     "custom/volume",
     "custom/brightness",
+    "power-profiles-daemon",
     "custom/battery"
   ],
 
@@ -88,6 +89,18 @@
     "return-type": "json",
     "interval": 10,
     "on-click": "xfce4-power-manager-settings"
+  },
+
+  // ── Power Profile (click to cycle) ───────────────────────────────
+  "power-profiles-daemon": {
+    "format": "[ {icon} ]",
+    "tooltip-format": "Power profile: {profile}\nClick to cycle",
+    "format-icons": {
+      "default": "󰾅",
+      "performance": "󰓅",
+      "balanced": "󰾅",
+      "power-saver": "󰾆"
+    }
   },
 
 

@@ -81,7 +81,7 @@ window#waybar {
 #custom-volume,
 #custom-battery,
 #custom-power,
-#custom-asus-profile,
+#power-profiles-daemon,
 #network,
 #battery,
 #pulseaudio,
@@ -130,12 +130,18 @@ window#waybar {
   color: #fab387;
 }
 
-/* === Asus Profile ======================================================== */
+/* === Power Profile ======================================================= */
 
-#custom-asus-profile {
-  font-weight: bold;
-  font-size: 12px;
-  color: #e5c07b;
+#power-profiles-daemon.performance {
+  color: #fab387;
+}
+
+#power-profiles-daemon.balanced {
+  color: #56b6c2;
+}
+
+#power-profiles-daemon.power-saver {
+  color: #98c379;
 }
 
 /* === VPN ================================================================= */
@@ -238,7 +244,7 @@ window#waybar {
 #bluetooth:hover,
 #custom-bluetooth:hover,
 #custom-power:hover,
-#custom-asus-profile:hover,
+#power-profiles-daemon:hover,
 #custom-battery:hover,
 #battery:hover,
 #backlight:hover,
