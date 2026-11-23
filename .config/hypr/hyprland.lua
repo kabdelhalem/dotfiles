@@ -50,6 +50,7 @@ hl.on("hyprland.start", function()
     hl.exec_cmd("waybar & hyprpaper & firefox")
     hl.exec_cmd("swayosd-server --config ~/.config/swayosd/config.toml --style ~/.config/swayosd/style.css")
     hl.exec_cmd("~/dev/dotfiles/scripts/hypr-urgent-flash.sh") -- flash urgent windows until focused
+    hl.exec_cmd("systembus-notify") -- relays earlyoom's system-bus alerts to swaync
 
     -- Cliphist
     hl.exec_cmd("wl-paste --type text --watch cliphist store")
