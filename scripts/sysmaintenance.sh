@@ -92,20 +92,20 @@ announce "Pruning ~/.cache (unused > $CACHE_DAYS days)"
 cache_before=$(du -sh ~/.cache | cut -f1)
 echo "Before: $cache_before"
 if confirm "Clean ~/.cache now? [y/N]"; then
-  find ~/.cache -type f -mtime +$CACHE_DAYS -print -delete
-  find ~/.cache -type d -empty -print -delete
+  echo "Deleted $(find ~/.cache -type f -mtime +$CACHE_DAYS -print -delete | wc -l) files"
+  find ~/.cache -type d -empty -delete
 fi
 cache_after=$(du -sh ~/.cache | cut -f1)
 echo "After: $cache_after"
 
 # ---------- 5. Journald rotate & vacuum ----------------------------------
 announce "Vacuuming journald logs ($JOURNAL_RETAIN)"
-journal_before=$(journalctl --disk-usage | awk '{print $NF}')
+journal_before=$(journalctl --disk-usage | grep -oE '[0-9.]+[BKMGTP]')
 if confirm "Rotate & vacuum journald now? [y/N]"; then
   sudo journalctl --rotate
   sudo journalctl --vacuum-time=$JOURNAL_RETAIN
 fi
-journal_after=$(journalctl --disk-usage | awk '{print $NF}')
+journal_after=$(journalctl --disk-usage | grep -oE '[0-9.]+[BKMGTP]')
 echo "Journald: $journal_before  ->  $journal_after"
 
 # ---------- 6. Failed systemd units --------------------------------------
