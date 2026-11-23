@@ -12,17 +12,22 @@
 hl.monitor({ output = "eDP-1",     mode = "1920x1200",     position = "0x0",        scale = 1 })
 hl.monitor({ output = "DP-1",      mode = "highres@highrr", position = "auto-up",    scale = 1 })
 hl.monitor({ output = "HDMI-A-1",  mode = "1920x1080@60",  position = "auto-right", scale = 1 })
+hl.monitor({ output = "DP-5",      mode = "1920x1080@60",  position = "auto-left", scale = 1 })
+hl.monitor({ output = "DP-7",      mode = "1920x1080@60",  position = "auto-right", scale = 1 })
 
 
 --------------------
 ---- WORKSPACES ----
 --------------------
 
--- Workspaces 1-5 live on the laptop panel; 6-10 are pinned to the external monitor.
+-- Workspaces 1-5 live on the laptop panel; 6-9 are pinned to DP-1.
 for i = 1, 5 do
     hl.workspace_rule({ workspace = tostring(i), monitor = "eDP-1" })
 end
-for i = 6, 10 do
+for _, i in ipairs({ 6, 7 }) do
+    hl.workspace_rule({ workspace = tostring(i), monitor = "DP-1" })
+end
+for _, i in ipairs({ 8, 9 }) do
     hl.workspace_rule({ workspace = tostring(i), monitor = "DP-1" })
 end
 
