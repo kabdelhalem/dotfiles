@@ -88,6 +88,7 @@ window#waybar {
 #backlight,
 #custom-notification,
 #custom-vpn,
+#memory,
 #clock,
 #tray {
   padding: 6px 12px;
@@ -186,6 +187,17 @@ window#waybar {
   background-color: #3b4252;
 }
 
+/* === Memory ============================================================ */
+
+#memory.warning {
+  color: #fab387;
+}
+
+#memory.critical {
+  background-color: #e06c75;
+  color: #1e1e2e;
+}
+
 /* === Tray ================================================================ */
 
 #tray {
@@ -249,6 +261,7 @@ window#waybar {
 #battery:hover,
 #backlight:hover,
 #custom-brightness:hover,
+#memory:hover,
 #clock:hover,
 #tray:hover {
   background-color: #4c566a;
