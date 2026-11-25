@@ -1,0 +1,8 @@
+[Unit]
+Description=Remove merged idle git worktrees and leaked docker leftovers
+
+[Service]
+Type=oneshot
+Nice=19
+IOSchedulingClass=idle
+ExecStart=%h/dev/dotfiles/dev-janitor/dev-janitor.sh --apply
